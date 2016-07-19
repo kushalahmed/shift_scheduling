@@ -291,9 +291,9 @@ How to use the Web Service:
 
         3.1 GET
 
-            It assumes that the database tables holds the employee and shifts information. It reads the database tables, and generates a schedule.
+            It assumes that the database tables hold the employee and shifts information. It reads the database tables, and generates a schedule.
 
-            The schedule contains shifts and comployees information for each week day.
+            The schedule contains shifts and employees information for each week day.
 
             Sample:
             curl GET http://localhost:6542/schedule
