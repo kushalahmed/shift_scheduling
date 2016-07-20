@@ -1,4 +1,5 @@
 import logging
+import os
 
 import sqlalchemy
 from pyramid.config import Configurator
@@ -9,9 +10,33 @@ import data
 from .models import Base, Session, Employee, Role, UnavailableDay, Shift
 
 
+def setup_environment_variables():
+    os.environ['MYSQL_ROOT_USER'] = 'root'
+    os.environ['MYSQL_ROOT_PASSWORD'] = 'admin'
+    os.environ['DB_HOST'] = '127.0.0.1'
+    os.environ['DB_PORT'] = '3306'
+    os.environ['MYSQL_DB_SCHEMA_NAME'] = 'shiftdb'
+    os.environ['INITIALISE_DATABASE_TABLES'] = 'false'
+    os.environ['RABBITMQ_HOST'] = '127.0.0.1'
+    os.environ['RABBITMQ_PORT'] = '5672'
+
+
+def expandvars_dict(settings):
+    """Expands all environment variables in a settings dictionary."""
+    return dict((key, os.path.expandvars(value)) for
+                key, value in settings.items())
+
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
+
+    # Setup environment variables
+    # Note: activate it if running in the local machine (not in Docker or so)
+    #setup_environment_variables()
+
+    # Expand the environment variables in the settings
+    settings = expandvars_dict(settings)
+
     config = Configurator(settings=settings)
     config.include('pyramid_chameleon')
 
